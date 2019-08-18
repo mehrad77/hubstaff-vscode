@@ -3,7 +3,8 @@ import axios from "axios";
 import { getGlobalState, usePrompt, useQuickPick, setGlobalState } from "./hooks";
 import { _getString } from './strings';
 import { API } from './API';
-import { IAuth, IUserWithAuthToken, IReport } from './types';
+import { IAuth, IUserWithAuthToken } from './types';
+import { secondsToHms } from './utils';
 
 let myStatusBarItem: vscode.StatusBarItem;
 
@@ -18,10 +19,9 @@ export function activate(context: vscode.ExtensionContext) {
 	} = context;
 
 	const { APP_TOKEN, EMAIL, PASSWORD, AUTH_TOKEN } = getGlobalState(globalState);
-	console.log({ APP_TOKEN, EMAIL, PASSWORD, AUTH_TOKEN });
-	if (APP_TOKEN && EMAIL && PASSWORD){
+	// console.log({ APP_TOKEN, EMAIL, PASSWORD, AUTH_TOKEN });
+	if (APP_TOKEN && EMAIL && PASSWORD && !AUTH_TOKEN){
 		API.Auth({APP_TOKEN, EMAIL, PASSWORD}).then((User:any) => {					
-			console.log({User});
 			setGlobalState(globalState,{AUTH_TOKEN: User.auth_token});
 		});
 	}
@@ -37,9 +37,8 @@ export function activate(context: vscode.ExtensionContext) {
 				await usePrompt(context,value).then(async () => {
 					vscode.window.showInformationMessage(`Your ${_getString(value)} is set now!`);
 					const { APP_TOKEN, EMAIL, PASSWORD, AUTH_TOKEN } = getGlobalState(globalState);
-					if (APP_TOKEN && EMAIL && PASSWORD){
+					if (APP_TOKEN && EMAIL && PASSWORD && !AUTH_TOKEN){
 						API.Auth({APP_TOKEN, EMAIL, PASSWORD}).then((User:any) => {					
-							console.log({User});
 							setGlobalState(globalState,{AUTH_TOKEN: User.auth_token});
 						});
 					}
@@ -72,9 +71,8 @@ function updateStatusBarItem(context: any): void {
 	myStatusBarItem.show();
 	if (APP_TOKEN && AUTH_TOKEN) {
 		API.custom.by_date.my(APP_TOKEN, AUTH_TOKEN).then(data => {		
-			const Data: IReport = data as IReport;
-			console.log({Data})
-			myStatusBarItem.text = `$(clock) Hubstaff APP Token not registerd yet`;
+			const Data: any = data;
+			myStatusBarItem.text = `$(clock) Today: ${secondsToHms(Data.organizations[0].dates[0].duration)}`;
 			myStatusBarItem.show();
 		});
 	} else {
