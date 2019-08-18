@@ -1,27 +1,99 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import axios from "axios";
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+let myStatusBarItem: vscode.StatusBarItem;
+
 export function activate(context: vscode.ExtensionContext) {
+	const { 
+		globalState,
+		subscriptions
+	} = context;
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "hubstaff" is now active!');
+	// let disposable = vscode.commands.registerCommand('extension.hubstaff', async () => {
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
+	// 	let USER_API_KEY = globalState.get('API_KEY', '');
+	// 	console.log(Boolean(USER_API_KEY),{USER_API_KEY});
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
-	});
+	// 	// if there was no API key stored in extention storage, ask for one
+	// 	if(USER_API_KEY){
+	// 		axios.defaults.headers.common['X-API-Key'] = USER_API_KEY;
+	// 		await vscode.window.showInformationMessage(`API key is already set!`);
+	// 	}
+	// 	else {
+	// 		await askForAPIKey(context).then(
+	// 			() => vscode.window.showInformationMessage(`API key is set now!`)
+	// 		);
+			
+	// 	}
+	// });
 
-	context.subscriptions.push(disposable);
+	// subscriptions.push(disposable);
+
+
+
+
+
+	// register a command that is invoked when the status bar
+	// item is selected
+	const myCommandId = 'sample.showSelectionCount';
+	subscriptions.push(vscode.commands.registerCommand(myCommandId, () => {
+		let n = getNumberOfSelectedLines(vscode.window.activeTextEditor);
+		vscode.window.showInformationMessage(`Yeah, ${n} line(s) selected... Keep going!`);
+	}));
+
+	// create a new status bar item that we can now manage
+	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+	myStatusBarItem.command = myCommandId;
+	subscriptions.push(myStatusBarItem);
+
+	// register some listener that make sure the status bar 
+	// item always up-to-date
+	subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateStatusBarItem));
+	subscriptions.push(vscode.window.onDidChangeTextEditorSelection(updateStatusBarItem));
+
+	// update status bar item once at start
+	updateStatusBarItem();
 }
 
-// this method is called when your extension is deactivated
+// const askForAPIKey = (context: any) => {
+// 	return new Promise(resolve => {
+// 		vscode.window.showInputBox({
+// 			placeHolder:"Enter you kutt.it API key...",
+// 			prompt: "you can find you API key in https://kutt.it/settings",
+// 			validateInput: (value) => {
+// 				if(value.match(/.{40}/)) return null;
+// 				return "API lenght must be 40 character length."
+// 			}
+// 		})
+// 		.then(
+// 			(value?: string) => {
+// 				context.globalState.update('API_KEY', value);
+// 				axios.defaults.headers.common['X-API-Key'] = value;
+// 				resolve();
+// 			},
+// 			(reason: any) => {
+// 				console.error("ERR002: Something bad happend.",reason)
+// 			}
+// 		);
+// 	});
+// }
+
+function updateStatusBarItem(): void {
+	let n = getNumberOfSelectedLines(vscode.window.activeTextEditor);
+	if (n > 0) {
+		myStatusBarItem.text = `$(megaphone) ${n} line(s) selected`;
+		myStatusBarItem.show();
+	} else {
+		myStatusBarItem.hide();
+	}
+}
+
+function getNumberOfSelectedLines(editor: vscode.TextEditor | undefined): number {
+	let lines = 0;
+	if (editor) {
+		lines = editor.selections.reduce((prev, curr) => prev + (curr.end.line - curr.start.line), 0);
+	}
+	return lines;
+}
+
 export function deactivate() {}
