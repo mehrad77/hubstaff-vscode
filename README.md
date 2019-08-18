@@ -24,7 +24,7 @@ Launch VS Code Quick Open (`Ctrl + P`), paste the following command, and press e
 ext install hubstaff
 ```
 
-Or search for [`kutt`](https://marketplace.visualstudio.com/items?itemName=mehrad.hubstaff) in your editor.
+Or search for [`Hubstaff`](https://marketplace.visualstudio.com/items?itemName=mehrad.hubstaff) in your editor.
 
 ## How to use?
 
@@ -41,9 +41,16 @@ Or search for [`kutt`](https://marketplace.visualstudio.com/items?itemName=mehra
 
 ## Release Notes
 
-###0.0.2
+## [Unreleased]
 
-- Initial release. It now works.
+## 0.0.2
+
+- Initial release.
+It would store your `APP_TOKEN` and `EMAIL` and `PASSWORD` to genrate `AUTH_TOKEN`. then it would use `API.custom.by_date.my` to get hours worked today.
+
+## 0.0.1
+
+- Clone project using `yo code` tool.
 
 
 ## Contributors <3
