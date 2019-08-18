@@ -5,10 +5,10 @@
 	"version": "0.0.1",
 	"publisher": "mehrad",
 	"repository": {
-        "type": "git",
+		"type": "git",
 		"url": "https://github.com/mehrad77/hubstaff-vscode.git"
 	},
-	"icon":"logo.png",
+	"icon": "logo.png",
 	"engines": {
 		"vscode": "^1.36.0"
 	},
@@ -16,14 +16,16 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [{
-			"command": "extension.helloWorld",
-			"title": "Hello World"
-		}]
+		"commands": [
+			{
+				"command": "extension.hubstaff",
+				"title": "Set Hubstaff API Key"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
@@ -39,8 +41,11 @@
 		"@types/vscode": "^1.37.0",
 		"glob": "^7.1.4",
 		"mocha": "^6.1.4",
-		"typescript": "^3.3.1",
 		"tslint": "^5.12.1",
+		"typescript": "^3.3.1",
 		"vscode-test": "^1.0.2"
+	},
+	"dependencies": {
+		"axios": "^0.19.0"
 	}
 }

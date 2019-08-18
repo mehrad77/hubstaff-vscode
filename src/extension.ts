@@ -1,27 +1,87 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import axios from "axios";
+import { getGlobalState, usePrompt, useQuickPick, setGlobalState } from "./hooks";
+import { _getString } from './strings';
+import { API } from './API';
+import { IAuth, IUserWithAuthToken, IReport } from './types';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+let myStatusBarItem: vscode.StatusBarItem;
+
+// register a command that is invoked when the status bar
+// item is selected
+const activationCommand = 'extension.hubstaff';
+
 export function activate(context: vscode.ExtensionContext) {
+	const { 
+		globalState,
+		subscriptions
+	} = context;
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "hubstaff" is now active!');
+	const { APP_TOKEN, EMAIL, PASSWORD, AUTH_TOKEN } = getGlobalState(globalState);
+	console.log({ APP_TOKEN, EMAIL, PASSWORD, AUTH_TOKEN });
+	if (APP_TOKEN && EMAIL && PASSWORD){
+		API.Auth({APP_TOKEN, EMAIL, PASSWORD}).then((User:any) => {					
+			console.log({User});
+			setGlobalState(globalState,{AUTH_TOKEN: User.auth_token});
+		});
+	}
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
+	subscriptions.push(vscode.commands.registerCommand(activationCommand, async () => {
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
-	});
+		useQuickPick(context).then(async (value) => {
+			if (value === 'DELETE'){
+				setGlobalState(globalState,{});
+				vscode.window.showInformationMessage(`All settings removed.`);
+			}
+			else if(value !== undefined){
+				await usePrompt(context,value).then(async () => {
+					vscode.window.showInformationMessage(`Your ${_getString(value)} is set now!`);
+					const { APP_TOKEN, EMAIL, PASSWORD, AUTH_TOKEN } = getGlobalState(globalState);
+					if (APP_TOKEN && EMAIL && PASSWORD){
+						API.Auth({APP_TOKEN, EMAIL, PASSWORD}).then((User:any) => {					
+							console.log({User});
+							setGlobalState(globalState,{AUTH_TOKEN: User.auth_token});
+						});
+					}
+				});
+			} else  {
+				vscode.window.showErrorMessage(`Command got cancelled.`);
+			}
+		});
+	}));
 
-	context.subscriptions.push(disposable);
+
+	// create a new status bar item that we can now manage
+	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+	myStatusBarItem.command = activationCommand;
+	subscriptions.push(myStatusBarItem);
+
+	// register some listener that make sure the status bar 
+	// item always up-to-date
+	subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateStatusBarItem));
+	subscriptions.push(vscode.window.onDidChangeTextEditorSelection(updateStatusBarItem));
+
+	// update status bar item once at start
+	updateStatusBarItem(context);
 }
 
-// this method is called when your extension is deactivated
+
+function updateStatusBarItem(context: any): void {
+	const { APP_TOKEN, AUTH_TOKEN } = getGlobalState(context.globalState);
+	myStatusBarItem.text = `$(clock) Hubstaff APP Token not registerd yet`;
+	myStatusBarItem.show();
+	if (APP_TOKEN && AUTH_TOKEN) {
+		API.custom.by_date.my(APP_TOKEN, AUTH_TOKEN).then(data => {		
+			const Data: IReport = data as IReport;
+			console.log({Data})
+			myStatusBarItem.text = `$(clock) Hubstaff APP Token not registerd yet`;
+			myStatusBarItem.show();
+		});
+	} else {
+		myStatusBarItem.text = `$(key) Hubstaff APP Token not registerd yet`;
+		myStatusBarItem.show();
+		// myStatusBarItem.hide();
+	}
+}
+
 export function deactivate() {}
