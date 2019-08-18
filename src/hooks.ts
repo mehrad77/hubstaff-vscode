@@ -7,21 +7,25 @@ export const getGlobalState = (globalState: any): IData => {
 	const APP_TOKEN = globalState.get('APP_TOKEN', '');
 	const EMAIL = globalState.get('EMAIL', '');
 	const PASSWORD = globalState.get('PASSWORD', '');
-	return { APP_TOKEN, EMAIL, PASSWORD };
+	const AUTH_TOKEN = globalState.get('AUTH_TOKEN', '');
+	return { APP_TOKEN, EMAIL, PASSWORD, AUTH_TOKEN };
 };
 
 export const setGlobalState = (globalState: any, {
 	APP_TOKEN,
 	EMAIL,
 	PASSWORD,
+	AUTH_TOKEN
 }: IData): boolean => {
 	if(APP_TOKEN) { globalState.update('APP_TOKEN', APP_TOKEN); }
 	if(EMAIL) { globalState.update('EMAIL', EMAIL); }
 	if(PASSWORD) { globalState.update('PASSWORD', PASSWORD); }
-	if(!APP_TOKEN && !EMAIL && !PASSWORD){
+	if(AUTH_TOKEN) { globalState.update('AUTH_TOKEN', AUTH_TOKEN); }
+	if(!APP_TOKEN && !EMAIL && !PASSWORD && !AUTH_TOKEN){
 		globalState.update('APP_TOKEN', '');
 		globalState.update('EMAIL', '');
 		globalState.update('PASSWORD', '');
+		globalState.update('AUTH_TOKEN', '');
 	}
 	return true;
 };

@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import axios from "axios";
 import { getGlobalState, usePrompt, useQuickPick, setGlobalState } from "./hooks";
 import { _getString } from './strings';
+import { API } from './API';
+import { IAuth, IUserWithAuthToken, IReport } from './types';
 
 let myStatusBarItem: vscode.StatusBarItem;
 
@@ -15,8 +17,17 @@ export function activate(context: vscode.ExtensionContext) {
 		subscriptions
 	} = context;
 
+	const { APP_TOKEN, EMAIL, PASSWORD, AUTH_TOKEN } = getGlobalState(globalState);
+	console.log({ APP_TOKEN, EMAIL, PASSWORD, AUTH_TOKEN });
+	if (APP_TOKEN && EMAIL && PASSWORD){
+		API.Auth({APP_TOKEN, EMAIL, PASSWORD}).then((User:any) => {					
+			console.log({User});
+			setGlobalState(globalState,{AUTH_TOKEN: User.auth_token});
+		});
+	}
+
 	subscriptions.push(vscode.commands.registerCommand(activationCommand, async () => {
-		console.log(getGlobalState(globalState));
+
 		useQuickPick(context).then(async (value) => {
 			if (value === 'DELETE'){
 				setGlobalState(globalState,{});
@@ -25,6 +36,13 @@ export function activate(context: vscode.ExtensionContext) {
 			else if(value !== undefined){
 				await usePrompt(context,value).then(async () => {
 					vscode.window.showInformationMessage(`Your ${_getString(value)} is set now!`);
+					const { APP_TOKEN, EMAIL, PASSWORD, AUTH_TOKEN } = getGlobalState(globalState);
+					if (APP_TOKEN && EMAIL && PASSWORD){
+						API.Auth({APP_TOKEN, EMAIL, PASSWORD}).then((User:any) => {					
+							console.log({User});
+							setGlobalState(globalState,{AUTH_TOKEN: User.auth_token});
+						});
+					}
 				});
 			} else  {
 				vscode.window.showErrorMessage(`Command got cancelled.`);
@@ -49,10 +67,16 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 function updateStatusBarItem(context: any): void {
-	const APP_TOKEN = context.globalState.get('APP_TOKEN', '');
-	if (APP_TOKEN) {
-		myStatusBarItem.text = `$(clock) Hubstaff APP Token not registerd yet`;
-		myStatusBarItem.show();
+	const { APP_TOKEN, AUTH_TOKEN } = getGlobalState(context.globalState);
+	myStatusBarItem.text = `$(clock) Hubstaff APP Token not registerd yet`;
+	myStatusBarItem.show();
+	if (APP_TOKEN && AUTH_TOKEN) {
+		API.custom.by_date.my(APP_TOKEN, AUTH_TOKEN).then(data => {		
+			const Data: IReport = data as IReport;
+			console.log({Data})
+			myStatusBarItem.text = `$(clock) Hubstaff APP Token not registerd yet`;
+			myStatusBarItem.show();
+		});
 	} else {
 		myStatusBarItem.text = `$(key) Hubstaff APP Token not registerd yet`;
 		myStatusBarItem.show();
