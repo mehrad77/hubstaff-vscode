@@ -1,0 +1,30 @@
+env:
+  global:
+    secure: [VS_TOKEN=<Visual Studio Auth Token>]
+
+install:
+- yarn install;
+
+script:
+- yarn test
+- yarn compile
+
+after_success:
+- npm install -g vsce;
+- vsce package;
+
+deploy:
+- provider: releases
+  api_key: [GITHUB_AUTH_TOKEN]
+  file_glob: true
+  file: "*.vsix"
+  skip_cleanup: true
+  on:
+    repo: mehrad77/kutt-vscode
+    tags: true
+- provider: script
+  script: vsce publish -p $VS_TOKEN
+  skip_cleanup: true
+  on:
+    repo: mehrad77/kutt-vscode
+    tags: true
