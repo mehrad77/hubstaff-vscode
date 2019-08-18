@@ -3,6 +3,12 @@
 	"displayName": "Hubstaff for VSCode ",
 	"description": "See how much you worked today (using Hubstaff Time Tracking Service) in you favorite editor",
 	"version": "0.0.1",
+	"publisher": "mehrad",
+	"repository": {
+        "type": "git",
+		"url": "https://github.com/mehrad77/hubstaff-vscode.git"
+	},
+	"icon":"logo.png",
 	"engines": {
 		"vscode": "^1.37.0"
 	},
