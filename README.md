@@ -23,7 +23,7 @@ Launch VS Code Quick Open (`Ctrl + P`), paste the following command, and press e
 ext install hubstaff
 ```
 
-Or search for [`kutt`](https://marketplace.visualstudio.com/items?itemName=mehrad.kutt) in your editor.
+Or search for [`kutt`](https://marketplace.visualstudio.com/items?itemName=mehrad.hubstaff) in your editor.
 
 ## How to use?
 
