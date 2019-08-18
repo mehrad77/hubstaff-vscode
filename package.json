@@ -2,7 +2,7 @@
 	"name": "hubstaff",
 	"displayName": "Hubstaff for VSCode ",
 	"description": "See how much you worked today (using Hubstaff Time Tracking Service) in you favorite editor",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"publisher": "mehrad",
 	"repository": {
 		"type": "git",
@@ -23,7 +23,7 @@
 		"commands": [
 			{
 				"command": "extension.hubstaff",
-				"title": "Set Hubstaff API Key"
+				"title": "Set Hubstaff Settings"
 			}
 		]
 	},
