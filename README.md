@@ -1,19 +1,22 @@
 # Hubstaff for VSCode
-
-[![Latest Release](https://vsmarketplacebadge.apphb.com/version-short/mehrad.hubstaff.svg)](https://marketplace.visualstudio.com/items?itemName=mehrad.hubstaff)
-[![Installs](https://vsmarketplacebadge.apphb.com/installs/mehrad.hubstaff.svg)](https://marketplace.visualstudio.com/items?itemName=mehrad.hubstaff)
-[![Rating](https://vsmarketplacebadge.apphb.com/rating-short/mehrad.hubstaff.svg)](https://marketplace.visualstudio.com/items?itemName=mehrad.hubstaff#review-details)
-
 <p align="center">
     <a href="https://marketplace.visualstudio.com/items?itemName=mehrad.hubstaff" title="Hubstaff">
         <img src="https://raw.githubusercontent.com/mehrad77/hubstaff-vscode/master/logo.png" alt="Hubstaff for VSCode">
     </a>
 </p>
 
+<center>
+    
+[![Latest Release](https://vsmarketplacebadge.apphb.com/version-short/mehrad.hubstaff.svg)](https://marketplace.visualstudio.com/items?itemName=mehrad.hubstaff)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs/mehrad.hubstaff.svg)](https://marketplace.visualstudio.com/items?itemName=mehrad.hubstaff)
+[![Rating](https://vsmarketplacebadge.apphb.com/rating-short/mehrad.hubstaff.svg)](https://marketplace.visualstudio.com/items?itemName=mehrad.hubstaff#review-details)
+
+
 See your worked hours in VSCode status bar. Powerd by **[Hubstaff API](https://app.hubstaff.com/developer/docs/api/v1)**.
 
 *Contributions and bug reports are welcome.*
 
+</center>
 
 ## Installing
 
