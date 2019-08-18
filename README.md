@@ -27,7 +27,12 @@ Or search for [`kutt`](https://marketplace.visualstudio.com/items?itemName=mehra
 
 ## How to use?
 
-// TODO
+ 1. Create an [app on your Hubstaff account](https://app.hubstaff.com/developer/my_apps).
+ ![](guid1.png)
+ 1. Copy your `App token`.
+ 1. Return to VSCode and press `Ctrl + Shift + P`, then type `hubstaff` and chose `Set Hubstaff App token`.
+ 1. paste your `App token`.
+ 1. Done! now you got your time for today in Status Bar,
 
 ## Extension Settings
 
@@ -35,9 +40,9 @@ Or search for [`kutt`](https://marketplace.visualstudio.com/items?itemName=mehra
 
 ## Release Notes
 
-// TODO
-<!-- ###0.0.2
-- Initial release. It now works. -->
+###0.0.2
+
+- Initial release. It now works.
 
 
 ## Contributors <3
