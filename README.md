@@ -50,6 +50,7 @@ Or search for [`kutt`](https://marketplace.visualstudio.com/items?itemName=mehra
 
 ## Contributors <3
 If you can make a contribution to this project, **that's one small step for you but one giant leap for mankind.**
+
 The API Specs can be found [here](https://app.hubstaff.com/developer/docs/api/v1). we're using version 1.
 
 ## Disclimer
