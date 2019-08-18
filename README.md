@@ -1,9 +1,7 @@
 # Hubstaff for VSCode
-<p align="center">
-    <a href="https://marketplace.visualstudio.com/items?itemName=mehrad.hubstaff" title="Hubstaff">
-        <img src="https://raw.githubusercontent.com/mehrad77/hubstaff-vscode/master/logo.png" alt="Hubstaff for VSCode">
-    </a>
-</p>
+<a href="https://marketplace.visualstudio.com/items?itemName=mehrad.hubstaff" title="Hubstaff">
+    <img src="https://raw.githubusercontent.com/mehrad77/hubstaff-vscode/master/logo.png" alt="Hubstaff for VSCode">
+</a>
 
 <center>
     
